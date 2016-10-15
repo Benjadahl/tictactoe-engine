@@ -47,9 +47,11 @@
         this.gridSelectDropdown = document.getElementById("tictactoe-grid-selection");
         this.playersParent = document.getElementById("tictactoe-players-select-div");
         this.gridSelectionText = document.getElementById("tictactoe-grid-selection-text");
+        this.gridSelectionExplanationText = document.getElementById("tictactoe-grid-selection-explanation-text");
         this.playerSelection = document.getElementById("tictactoe-choose-number-of-players");
         this.playerSelectDropdown = document.getElementById("tictactoe-players-selection");
         this.playerSelectText = document.getElementById("tictactoe-players-selection-text");
+        this.playerSelectExplanationText = document.getElementById("tictactoe-player-selection-explanation-text");
         this.gridParent = document.getElementById("tictactoe-grid-select-div");
         this.playAgainButton;
     }
@@ -66,28 +68,30 @@
 
     function createGrid(){
         this.numOfGrids = parseInt(this.gridSelectDropdown.value);
-        
+
         this.squareSize = this.numOfGrids * this.numOfGrids;
-        
+
         this.gridParent.removeChild(this.gridSelection);
         this.gridParent.removeChild(this.gridSelectDropdown);
+        this.gridParent.removeChild(this.gridSelectionExplanationText);
         this.playersParent.removeChild(this.playerSelection);
         this.playersParent.removeChild(this.playerSelectDropdown);
         this.playersParent.removeChild(this.playerSelectText);
-    
+        this.playersParent.removeChild(this.playerSelectExplanationText);
+
         this.gridSelectionText.innerHTML = "Play on and enjoy!";
-        
+
         var i=0;
         while(i < this.squareSize) {
             var thisSquare = '<div id="tictactoe-square-' + i + '" class="tictactoe-squares" align="center" state="not-played"></div>';
             this.thisBoard.innerHTML += thisSquare;
             i++;
         }
-    
+
         var j=0;
         while(j < this.squareSize){
             this.eachSquare.push(document.getElementById("tictactoe-square-" + j));
-            if(this.numOfGrids == 3) {    
+            if(this.numOfGrids == 3) {
                 this.eachSquare[j].style.width = "30%";
                 this.eachSquare[j].style.height = "30%";
             }
@@ -97,11 +101,11 @@
             }
             j++;
         }
-    
+
         // TODO move the dom manipulation into it's own method'
         this.gridParent.innerHTML += '<button id="tictactoe-play-again">Play again</button><br><br>';
         this.gridParent.innerHTML += '<a href="./tictactoe.html" id="reset-conditions">Reset conditions</a>';
-        
+
         this.playAgainButton = document.getElementById("tictactoe-play-again");
         this.playAgainButton.addEventListener("click", this.playAgain.bind(this));
     }
@@ -123,7 +127,7 @@
     function onePlayerGame(e){
         e = e || window.event;
         var target = e.target;
-        if(target.getAttribute("state") == "not-played" && this.game == 0) {    
+        if(target.getAttribute("state") == "not-played" && this.game == 0) {
             target.setAttribute("state", "played");
             if(this.turn%2 == 0) {
                 target.innerHTML = "X";
@@ -143,7 +147,7 @@
             }
             // TODO refactor the below code
             // checkWin and the full grid check are duplicated
-            if(this.turn%2 == 0) {    
+            if(this.turn%2 == 0) {
                 this.thisIndex = (this.playAI(this.eachSquare, this.turn, "X") + " ").split(" ");
                 this.eachSquare[parseInt(this.thisIndex[1])].innerHTML = "X";
                 this.eachSquare[parseInt(this.thisIndex[1])].setAttribute("state", "played");
@@ -167,7 +171,7 @@
     function twoPlayerGame(e) {
         e = e || window.event;
         var target = e.target
-        if(target.getAttribute("state") == "not-played" && this.game == 0) {    
+        if(target.getAttribute("state") == "not-played" && this.game == 0) {
             target.setAttribute("state", "played");
             if(this.turn%2 == 0) {
                 target.innerHTML = "X";
@@ -177,7 +181,7 @@
             }
             this.turn++;
             this.checkWin(true); // true because it is the final check (no temp checks required for two player games)
-        }        
+        }
     }
 
     function playAI(eachSquare, thisMoveNumber, player){
@@ -224,7 +228,7 @@
                     returnIndex = i;
                 }
                 this.eachSquare[i].innerHTML = "";
-                this.eachSquare[i].setAttribute("state", "not-played");  
+                this.eachSquare[i].setAttribute("state", "not-played");
             }
             i++;
         }
@@ -237,7 +241,7 @@
         while(j < this.squareSize){
             this.eachSquare[j].setAttribute("state", "not-played");
             this.eachSquare[j].innerHTML = "";
-            this.eachSquare[j].style.backgroundColor = ""; 
+            this.eachSquare[j].style.backgroundColor = "";
             j++;
         }
         this.game = 0;
@@ -252,7 +256,7 @@
                 if(finalCheck){
                     this.highlightWinningLine(j, 'row');
                     this.game = 1;
-                } 
+                }
                 return 1;
             }
             if(this.checkColumn(j)) {
@@ -293,8 +297,8 @@
                 }
             }
             return true;
-        }    
-        return false; 
+        }
+        return false;
     }
 
     function checkColumn(column){
@@ -307,8 +311,8 @@
                 }
             }
             return true;
-        }    
-        return false; 
+        }
+        return false;
     }
 
     function checkDiagonal(start){
@@ -322,7 +326,7 @@
                 }
                 return true;
             }
-            return false; 
+            return false;
         }else if(start === this.numOfGrids - 1){
             var diagEnd = this.numOfGrids * (this.numOfGrids - 1);
             if(this.eachSquare[start].getAttribute("state") == "played"){
@@ -333,7 +337,7 @@
                 }
                 return true;
             }
-            return false; 
+            return false;
         }
     }
 
@@ -354,7 +358,7 @@
         }
 
         for(var j = start; j < end; j = j + increment){
-            this.eachSquare[j].style.backgroundColor = "green"; 
+            this.eachSquare[j].style.backgroundColor = "green";
         }
     }
 
